@@ -1,10 +1,23 @@
 
 let ul = document.querySelector("ul");
-let div = document.getElementsByClassName("images");
+let div = document.querySelector(".images");
+let button = document.querySelector(".reset2");
 
-axios .get("https://dog.ceo/api/breeds/list/all").then (breeds => {
-    console.log(breeds.data.message);
-    for(let types in breeds.data.message){
+window.onload = () => {
+    axios .get("https://dog.ceo/api/breeds/image/random/3").then (loader => {
+        let pics = loader.data.message;
+        pics.forEach(e => {
+            let img = document.createElement("img");
+            img.src = e;
+            div.appendChild(img);
+        });
+    })
+}
+
+// creating li items of the different breedNames
+axios .get("https://dog.ceo/api/breeds/list/all").then (breedNames => {
+
+    for(let types in breedNames.data.message){
         let li = document.createElement("li");
 
         li.textContent = types;
@@ -14,14 +27,45 @@ axios .get("https://dog.ceo/api/breeds/list/all").then (breeds => {
     
         
 });
-
-axios .get("https://dog.ceo/api/breed/hound/afghan/images/random/3").then (pictures => {
+// event listener to delete the old pages and randomize 3 new ones on the click of the button
+button.addEventListener("click", function(e){
+    axios .get("https://dog.ceo/api/breeds/image/random/3").then (pictures => {
         
-            console.log(pictures)
-            for(let pics in pictures.data.message){
-                let img = document.createElement("img");
-
-                img.textContent = pics;
-                div.appendChild(img)
-            }
+    
+        div.innerHTML = "";
+        let pics = pictures.data.message;
+        pics.forEach(e => {
+            let img = document.createElement("img");
+            img.src = e;
+            div.appendChild(img);
         });
+        
+        
+
+})
+
+
+    
+        
+  
+        
+    });
+        
+     // eventlistener on click to get the correct breed pictures
+    ul.addEventListener("click", e =>{
+        let id = e.target.textContent;
+        axios .get("https://dog.ceo/api/breed/"+ id + "/images/random/3").then (breeds => {
+        
+        div.innerHTML = "";
+        let pics2 = breeds.data.message;
+        pics2.forEach(e => {
+            
+                let img = document.createElement("img");
+                img.src = e;
+                div.appendChild(img);
+            
+        })
+
+        })
+    })
+  
