@@ -15,6 +15,7 @@ window.onload = () => {
 }
 
 // creating li items of the different breedNames
+function creator(){
 axios .get("https://dog.ceo/api/breeds/list/all").then (breedNames => {
 
     for(let types in breedNames.data.message){
@@ -22,16 +23,18 @@ axios .get("https://dog.ceo/api/breeds/list/all").then (breedNames => {
 
         li.textContent = types;
         ul.appendChild(li)
+        createSub(types,li)
     }
     
     
         
 });
+}
 // event listener to delete the old pages and randomize 3 new ones on the click of the button
 button.addEventListener("click", function(e){
     axios .get("https://dog.ceo/api/breeds/image/random/3").then (pictures => {
         
-    
+        
         div.innerHTML = "";
         let pics = pictures.data.message;
         pics.forEach(e => {
@@ -45,9 +48,7 @@ button.addEventListener("click", function(e){
 })
 
 
-    
-        
-  
+
         
     });
         
@@ -65,7 +66,47 @@ button.addEventListener("click", function(e){
                 div.appendChild(img);
             
         })
-
+     
         })
     })
   
+    function createSub(types,value){
+        
+        let divBox = document.createElement("div");
+        let li = value;
+        console.log(li);
+        if(types === "buhund" || types === "bulldog" || types === "bullterrier" || 
+        types === "cattledog" || types === "collie" || types === "corgi" ||
+        types === "dane" || types === "deerhound" || types === "elkhound" ||
+        types === "frise" || types === "greyhound" || types === "hound" ||
+        types === "mastiff" || types === "mountain" || types === "pinscher" || 
+        types === "pointer" || types === "poodle" || types === "retriever" ||
+        types === "ridgeback" || types === "schnauzer" || types === "setter" ||
+        types === "sheepdog" || types === "spaniel" || types === "springer" ||
+        types === "terrier" || types === "waterdog" || types === "wolfhound") {
+            axios .get(`https://dog.ceo/api/breed/${types}/list`)
+            .then(response => {
+                let subs = response.data.message
+                
+                for(let sub of subs){
+                    let li2 = document.createElement("li");
+                    let ul2 = document.createElement("ul");
+                    li2.textContent = sub;
+                    console.log(li2)
+                    ul2.appendChild(li2);
+                    
+                }
+
+            })
+        }
+    }
+  
+    
+    creator()
+    
+
+
+
+
+
+
