@@ -58,7 +58,7 @@ button.addEventListener("click", function(e){
 
         el.addEventListener("click", e =>{
             e.stopPropagation();
-            let id = e.target.textContent;
+            
             const url = subbreed
                 ? "https://dog.ceo/api/breed/"+ breed + "/" + subbreed + "/images/random/3"
                 : "https://dog.ceo/api/breed/"+ breed + "/images/random/3";
