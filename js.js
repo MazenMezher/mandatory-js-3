@@ -6,16 +6,7 @@ let button = document.querySelector(".reset2");
 
 
   
-    axios.get(`https://dog.ceo/api/breeds/image/random/3`).then(img => {
-      div.innerHTML = "";
-      for(let links of img.data.message){
-        let imgs = document.createElement("img");
-        imgs.src = links;
-        div.appendChild(imgs);
-    }
-        
-  })
-
+    
 
 
 
@@ -47,7 +38,19 @@ let button = document.querySelector(".reset2");
         div.appendChild(imgs);
     }
     })
-  } 
+  } else {
+    axios.get(`https://dog.ceo/api/breeds/image/random/3`).then(img => {
+      div.innerHTML = "";
+      
+      for(let links of img.data.message){
+        let imgs = document.createElement("img");
+        imgs.src = links;
+        div.appendChild(imgs);
+    }
+        
+  })
+
+  }
     
 
 
@@ -83,25 +86,52 @@ axios .get("https://dog.ceo/api/breeds/list/all").then (breedNames => {
 });
 }
 // event listener to delete the old pages and randomize 3 new ones on the click of the button
-button.addEventListener("click", function(e){
-    axios .get("https://dog.ceo/api/breeds/image/random/3").then (pictures => {
-        
-        
+
+function newPics(){
+   
+  button.addEventListener("click", e => {
+    div.innerHTML = "";
+    if(window.location.hash.includes("-")){
+      let hash = window.location.hash.substring(1);
+      let splitter = hash.split("-");
+      let mainBreed = splitter[0];
+      let subBreed = splitter[1];
+      axios .get(`https://dog.ceo/api/breed/${mainBreed}/${subBreed}/images/random/3`).then(img =>{
         div.innerHTML = "";
-        let pics = pictures.data.message;
-        pics.forEach(e => {
-            let img = document.createElement("img");
-            img.src = e;
-            div.appendChild(img);
-        });
-      
-      
-})
-
-
-
-    });
+        for(let links of img.data.message){
+            let imgs = document.createElement("img");
+            imgs.src = links;
+            div.appendChild(imgs);
+        }
+  
         
+      })
+    } else if (window.location.hash) {
+    
+      let hash = window.location.hash.substring(1);
+      axios .get(`https://dog.ceo/api/breed/${hash}/images/random/3`).then(img =>{
+        div.innerHTML = "";
+        for(let links of img.data.message){
+          let imgs = document.createElement("img");
+          imgs.src = links;
+          div.appendChild(imgs);
+      }
+      })
+    } else {
+      axios.get(`https://dog.ceo/api/breeds/image/random/3`).then(img => {
+
+      for(let links of img.data.message){
+        let imgs = document.createElement("img");
+        imgs.src = links;
+        div.appendChild(imgs);
+    }
+        
+  })
+
+    }
+
+  })
+}
      // eventlistener on click to get the correct breed pictures
     function clickBreed(el, breed, subbreed){ 
       
@@ -123,7 +153,6 @@ button.addEventListener("click", function(e){
                 
             })
             })
-           
         })
     }
     
@@ -139,6 +168,7 @@ button.addEventListener("click", function(e){
             window.location.hash = `${parent}-${subChild}`;
             
           }
+          
         }
       })
     }
@@ -172,6 +202,7 @@ button.addEventListener("click", function(e){
                     
                     li2.addEventListener("click", e =>{
                       getHashSubs(e.target);
+                      
                     })
                   
                 
@@ -189,7 +220,7 @@ button.addEventListener("click", function(e){
     }
     message()
     creator()
-
+    newPics()
 
 
 
