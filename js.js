@@ -17,6 +17,7 @@ let button = document.querySelector(".reset2");
     let splitter = hash.split("-");
     let mainBreed = splitter[0];
     let subBreed = splitter[1];
+    message(`${mainBreed} ${subBreed}`);
     axios .get(`https://dog.ceo/api/breed/${mainBreed}/${subBreed}/images/random/3`).then(img =>{
       div.innerHTML = "";
       for(let links of img.data.message){
@@ -28,8 +29,9 @@ let button = document.querySelector(".reset2");
       
     })
   } else if (window.location.hash) {
-  
+    
     let hash = window.location.hash.substring(1);
+    message(hash);
     axios .get(`https://dog.ceo/api/breed/${hash}/images/random/3`).then(img =>{
       div.innerHTML = "";
       for(let links of img.data.message){
@@ -39,6 +41,7 @@ let button = document.querySelector(".reset2");
     }
     })
   } else {
+    message("Random dogs");
     axios.get(`https://dog.ceo/api/breeds/image/random/3`).then(img => {
       div.innerHTML = "";
       
@@ -77,6 +80,7 @@ axios .get("https://dog.ceo/api/breeds/list/all").then (breedNames => {
 
         li.addEventListener("click", e => {
           let hash = window.location.hash = types;
+          message(hash);
           getHashMain(hash)
         })
     }
@@ -137,7 +141,7 @@ function newPics(){
       
         el.addEventListener("click", e =>{
             e.stopPropagation();
-            message(e.target.textContent);
+            
             const url = subbreed
                 ? "https://dog.ceo/api/breed/"+ breed + "/" + subbreed + "/images/random/3"
                 : "https://dog.ceo/api/breed/"+ breed + "/images/random/3";
@@ -161,6 +165,7 @@ function newPics(){
     function getHashSubs(li){
       let parent = li.parentNode.parentNode.firstChild.textContent;
       let subChild = li.textContent;
+      message(`${parent} ${subChild}`)
       axios .get(`https://dog.ceo/api/breed/${parent}/list`).then(res =>{
         for(let child of res.data.message){
           if(child === subChild){
@@ -218,7 +223,7 @@ function newPics(){
     function message(msg){
         document.getElementById("msg").innerHTML= msg;
     }
-    message()
+ 
     creator()
     newPics()
 
