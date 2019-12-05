@@ -3,16 +3,59 @@ let ul = document.querySelector("ul");
 let div = document.querySelector(".images");
 let button = document.querySelector(".reset2");
 
-window.onload = () => {
-    axios .get("https://dog.ceo/api/breeds/image/random/3").then (loader => {
-        let pics = loader.data.message;
-        pics.forEach(e => {
-            let img = document.createElement("img");
-            img.src = e;
-            div.appendChild(img);
-        });
+
+
+  
+    axios.get(`https://dog.ceo/api/breeds/image/random/3`).then(img => {
+      div.innerHTML = "";
+      for(let links of img.data.message){
+        let imgs = document.createElement("img");
+        imgs.src = links;
+        div.appendChild(imgs);
+    }
+        
+  })
+
+
+
+
+
+  
+  if(window.location.hash.includes("-")){
+    let hash = window.location.hash.substring(1);
+    let splitter = hash.split("-");
+    let mainBreed = splitter[0];
+    let subBreed = splitter[1];
+    axios .get(`https://dog.ceo/api/breed/${mainBreed}/${subBreed}/images/random/3`).then(img =>{
+      div.innerHTML = "";
+      for(let links of img.data.message){
+          let imgs = document.createElement("img");
+          imgs.src = links;
+          div.appendChild(imgs);
+      }
+
+      
     })
+  } else if (window.location.hash) {
+  
+    let hash = window.location.hash.substring(1);
+    axios .get(`https://dog.ceo/api/breed/${hash}/images/random/3`).then(img =>{
+      div.innerHTML = "";
+      for(let links of img.data.message){
+        let imgs = document.createElement("img");
+        imgs.src = links;
+        div.appendChild(imgs);
+    }
+    })
+  } 
+    
+
+
+function getHashMain(hash){
+  // `` <--- tillåter dig att använda ${variabel} istället för concat string
+    axios .get(`https://dog.ceo/api/breed/${hash}/list`)
 }
+
 
 // creating li items of the different breedNames
 function creator(){
@@ -22,11 +65,17 @@ axios .get("https://dog.ceo/api/breeds/list/all").then (breedNames => {
         let li = document.createElement("li");
         let divBox2 = document.createElement("div");
 
+
         li.textContent = types;
         divBox2.appendChild(li);
         ul.appendChild(divBox2);
         clickBreed(li, types);
         createSub(types,divBox2)
+
+        li.addEventListener("click", e => {
+          let hash = window.location.hash = types;
+          getHashMain(hash)
+        })
     }
     
     
@@ -58,7 +107,7 @@ button.addEventListener("click", function(e){
       
         el.addEventListener("click", e =>{
             e.stopPropagation();
-            message(breed);
+            message(e.target.textContent);
             const url = subbreed
                 ? "https://dog.ceo/api/breed/"+ breed + "/" + subbreed + "/images/random/3"
                 : "https://dog.ceo/api/breed/"+ breed + "/images/random/3";
@@ -79,6 +128,21 @@ button.addEventListener("click", function(e){
     }
     
     
+
+    function getHashSubs(li){
+      let parent = li.parentNode.parentNode.firstChild.textContent;
+      let subChild = li.textContent;
+      axios .get(`https://dog.ceo/api/breed/${parent}/list`).then(res =>{
+        for(let child of res.data.message){
+          if(child === subChild){
+            subChild = child;
+            window.location.hash = `${parent}-${subChild}`;
+            
+          }
+        }
+      })
+    }
+
     function createSub(types,value){
         
         let divBox = document.createElement("div");
@@ -106,10 +170,16 @@ button.addEventListener("click", function(e){
                     clickBreed(li2, types, sub);
                     divBox.appendChild(li2); 
                     
+                    li2.addEventListener("click", e =>{
+                      getHashSubs(e.target);
+                    })
+                  
                 
                 }
                 divBox3.appendChild(divBox);
-            
+                
+                
+
             })
         }
     }

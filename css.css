@@ -66,12 +66,12 @@ img{
     height: 250px;
 }
 
-.list > li > div {
+.list > div > div {
     display: none;
     
 }
 
-.list > li:hover > div {
+.list > div:hover > div {
   display: block;
   
   background-color: darkgreen;
