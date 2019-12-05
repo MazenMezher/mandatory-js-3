@@ -20,11 +20,13 @@ axios .get("https://dog.ceo/api/breeds/list/all").then (breedNames => {
 
     for(let types in breedNames.data.message){
         let li = document.createElement("li");
+        let divBox2 = document.createElement("div");
 
         li.textContent = types;
-        ul.appendChild(li);
+        divBox2.appendChild(li);
+        ul.appendChild(divBox2);
         clickBreed(li, types);
-        createSub(types,li)
+        createSub(types,divBox2)
     }
     
     
@@ -43,22 +45,20 @@ button.addEventListener("click", function(e){
             img.src = e;
             div.appendChild(img);
         });
-        
-        
-
+      
+      
 })
 
 
 
-        
     });
         
      // eventlistener on click to get the correct breed pictures
     function clickBreed(el, breed, subbreed){ 
-
+      
         el.addEventListener("click", e =>{
             e.stopPropagation();
-            
+            message(breed);
             const url = subbreed
                 ? "https://dog.ceo/api/breed/"+ breed + "/" + subbreed + "/images/random/3"
                 : "https://dog.ceo/api/breed/"+ breed + "/images/random/3";
@@ -73,8 +73,8 @@ button.addEventListener("click", function(e){
                     div.appendChild(img);
                 
             })
-            
             })
+           
         })
     }
     
@@ -83,7 +83,7 @@ button.addEventListener("click", function(e){
         
         let divBox = document.createElement("div");
         
-        let li = value;
+        let divBox3 = value;
         
         if(types === "buhund" || types === "bulldog" || types === "bullterrier" || 
         types === "cattledog" || types === "collie" || types === "corgi" ||
@@ -108,12 +108,16 @@ button.addEventListener("click", function(e){
                     
                 
                 }
-                li.appendChild(divBox);
+                divBox3.appendChild(divBox);
             
             })
         }
     }
     
+    function message(msg){
+        document.getElementById("msg").innerHTML= msg;
+    }
+    message()
     creator()
 
 
