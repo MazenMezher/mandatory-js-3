@@ -17,7 +17,7 @@ let button = document.querySelector(".reset2");
     let splitter = hash.split("-");
     let mainBreed = splitter[0];
     let subBreed = splitter[1];
-    message(`${mainBreed} ${subBreed}`);
+    message(`${mainBreed} - ${subBreed}`);
     axios .get(`https://dog.ceo/api/breed/${mainBreed}/${subBreed}/images/random/3`).then(img =>{
       div.innerHTML = "";
       for(let links of img.data.message){
@@ -165,7 +165,7 @@ function newPics(){
     function getHashSubs(li){
       let parent = li.parentNode.parentNode.firstChild.textContent;
       let subChild = li.textContent;
-      message(`${parent} ${subChild}`)
+      message(`${parent} - ${subChild}`)
       axios .get(`https://dog.ceo/api/breed/${parent}/list`).then(res =>{
         for(let child of res.data.message){
           if(child === subChild){
@@ -181,9 +181,9 @@ function newPics(){
     function createSub(types,value){
         
         let divBox = document.createElement("div");
-        
+        divBox.className = "subBreedBox";
         let divBox3 = value;
-        
+        divBox3.className = "subBox"
         if(types === "buhund" || types === "bulldog" || types === "bullterrier" || 
         types === "cattledog" || types === "collie" || types === "corgi" ||
         types === "dane" || types === "deerhound" || types === "elkhound" ||
